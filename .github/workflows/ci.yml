@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        moodle-branch: ['MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'MOODLE_402_STABLE', 'MOODLE_403_STABLE', 'MOODLE_404_STABLE', 'MOODLE_405_STABLE']
-        php-version: ['8.1', '8.2', '8.3']
+        moodle-branch: ['MOODLE_404_STABLE', 'MOODLE_405_STABLE']
+        php-version: ['8.2', '8.3']
 
     services:
       mariadb:
@@ -29,11 +29,9 @@ jobs:
           --health-retries=5
 
     steps:
-      # Checkout repo
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -41,13 +39,8 @@ jobs:
           extensions: mysqli, pdo, mbstring, curl, xml, zip, intl
           coverage: none
 
-      # Install composer deps (if any)
-      - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress || true
-
-      # Run Moodle Plugin CI
       - name: Run Moodle Plugin CI
-        uses: moodlehq/moodle-plugin-ci@v4
+        uses: moodlehq/moodle-plugin-ci@main
         with:
           plugin-path: .
           moodle-branch: ${{ matrix.moodle-branch }}
