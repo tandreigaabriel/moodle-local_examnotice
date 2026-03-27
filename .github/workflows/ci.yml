@@ -1,0 +1,56 @@
+name: Moodle Plugin CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  moodle-plugin-ci:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        moodle-branch: ['MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'MOODLE_402_STABLE', 'MOODLE_403_STABLE', 'MOODLE_404_STABLE', 'MOODLE_405_STABLE']
+        php-version: ['8.1', '8.2', '8.3']
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: moodle
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      # Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mysqli, pdo, mbstring, curl, xml, zip, intl
+          coverage: none
+
+      # Install composer deps (if any)
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress || true
+
+      # Run Moodle Plugin CI
+      - name: Run Moodle Plugin CI
+        uses: moodlehq/moodle-plugin-ci@v4
+        with:
+          plugin-path: .
+          moodle-branch: ${{ matrix.moodle-branch }}
+          php-version: ${{ matrix.php-version }}
+          db: mariadb
+          parallel: true
