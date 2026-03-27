@@ -1,0 +1,159 @@
+/**
+ * Styles for local_examnotice modal.
+ *
+ * @package    local_examnotice
+ * @copyright  2026 local_examnotice contributors
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+#examNoticeModal .en-header {
+    background: linear-gradient(135deg, #1a4a1a 0%, #2d7a2d 60%, #3a9a3a 100%);
+    padding: 1.4rem 1.8rem;
+    border-radius: .5rem .5rem 0 0;
+    position: relative;
+    overflow: hidden;
+}
+#examNoticeModal .en-header::before {
+    content: "";
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+}
+#examNoticeModal .en-header::after {
+    content: "";
+    position: absolute;
+    bottom: -30px; left: 20px;
+    width: 90px; height: 90px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+}
+#examNoticeModal .en-title {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
+    letter-spacing: 0.3px;
+    position: relative;
+    z-index: 1;
+}
+#examNoticeModal .en-badge {
+    background: linear-gradient(90deg, #fff7e6, #fff3d6);
+    border-left: 4px solid #e6a817;
+    border-radius: 6px;
+    padding: .7rem 1rem;
+    margin-bottom: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .92rem;
+    color: #5a3a00;
+}
+#examNoticeModal .en-badge strong {
+    color: #3d2600;
+}
+#examNoticeModal .modal-body {
+    padding: 1.4rem 1.8rem;
+    max-height: 62vh;
+    overflow-y: auto;
+    background: #fafffe;
+}
+#examNoticeModal .modal-body::-webkit-scrollbar {
+    width: 5px;
+}
+#examNoticeModal .modal-body::-webkit-scrollbar-track {
+    background: #f0f7f0;
+}
+#examNoticeModal .modal-body::-webkit-scrollbar-thumb {
+    background: #2d7a2d;
+    border-radius: 10px;
+}
+#examNoticeModal .en-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#examNoticeModal .en-list li {
+    padding: .45rem .5rem .45rem 0;
+    border-bottom: 1px solid #eef5ee;
+    font-size: .93rem;
+    color: #2a2a2a;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+}
+#examNoticeModal .en-list li:last-child {
+    border-bottom: none;
+}
+#examNoticeModal .en-list li .en-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+#examNoticeModal .en-list a {
+    color: #2d7a2d;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px dashed #2d7a2d;
+}
+#examNoticeModal .en-list a:hover {
+    color: #1a4a1a;
+    border-bottom-style: solid;
+}
+#examNoticeModal .en-footer {
+    background: #f5faf5;
+    border-top: 1px solid #d8eed8;
+    padding: .9rem 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 .5rem .5rem;
+    gap: .5rem;
+}
+#examNoticeModal .en-btn-dismiss {
+    background: transparent;
+    border: 1.5px solid #aaa;
+    color: #666;
+    border-radius: 6px;
+    padding: .45rem 1rem;
+    font-size: .85rem;
+    cursor: pointer;
+    transition: all .2s;
+}
+#examNoticeModal .en-btn-dismiss:hover {
+    border-color: #666;
+    color: #333;
+    background: #f0f0f0;
+}
+#examNoticeModal .en-btn-confirm {
+    background: linear-gradient(135deg, #1a4a1a, #2d7a2d);
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    padding: .55rem 1.5rem;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    box-shadow: 0 3px 10px rgba(45,122,45,0.35);
+    letter-spacing: 0.2px;
+}
+#examNoticeModal .en-btn-confirm:hover {
+    background: linear-gradient(135deg, #0f3010, #236023);
+    box-shadow: 0 4px 14px rgba(45,122,45,0.45);
+    transform: translateY(-1px);
+}
+#examNoticeModal .en-btn-confirm:disabled {
+    opacity: .65;
+    transform: none;
+    cursor: not-allowed;
+}
+#examNoticeModal .modal-content {
+    border: none;
+    border-radius: .5rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 6px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
