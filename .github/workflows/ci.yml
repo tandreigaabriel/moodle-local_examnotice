@@ -5,45 +5,69 @@ on:
   pull_request:
 
 jobs:
-  moodle-plugin-ci:
-    runs-on: ubuntu-latest
+  ci:
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
       matrix:
-        moodle-branch: ['MOODLE_404_STABLE', 'MOODLE_405_STABLE']
-        php-version: ['8.2', '8.3']
+        php: ["8.2", "8.3"]
+        moodle-branch: ["MOODLE_404_STABLE", "MOODLE_405_STABLE"]
+        database: ["mariadb"]
 
     services:
       mariadb:
         image: mariadb:10.6
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: moodle
+          MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+          MYSQL_CHARACTER_SET_SERVER: "utf8mb4"
+          MYSQL_COLLATION_SERVER: "utf8mb4_unicode_ci"
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+          --health-cmd="mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          path: plugin
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ matrix.php }}
           extensions: mysqli, pdo, mbstring, curl, xml, zip, intl
-          coverage: none
 
-      - name: Run Moodle Plugin CI
-        uses: moodlehq/moodle-plugin-ci@main
-        with:
-          plugin-path: .
-          moodle-branch: ${{ matrix.moodle-branch }}
-          php-version: ${{ matrix.php-version }}
-          db: mariadb
-          parallel: true
+      - name: Install moodle-plugin-ci
+        run: |
+          composer create-project moodlehq/moodle-plugin-ci ci ^4
+          echo "$(pwd)/ci/bin" >> $GITHUB_PATH
+          echo "$(pwd)/ci/vendor/bin" >> $GITHUB_PATH
+
+      - name: Install Moodle
+        run: |
+          moodle-plugin-ci install \
+            --plugin ./plugin \
+            --db-host=127.0.0.1 \
+            --branch ${{ matrix.moodle-branch }}
+        env:
+          DB: ${{ matrix.database }}
+
+      - name: PHP Lint
+        run: moodle-plugin-ci phplint ./plugin
+
+      - name: Moodle Code Checker
+        run: moodle-plugin-ci phpcs ./plugin --max-warnings 0
+
+      - name: Moodle PHPDoc Checker
+        run: moodle-plugin-ci phpdoc ./plugin --max-warnings 0
+
+      - name: Validate Plugin
+        run: moodle-plugin-ci validate ./plugin
+
+      - name: Mustache Lint
+        run: moodle-plugin-ci mustache ./plugin
