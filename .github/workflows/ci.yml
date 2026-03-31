@@ -72,8 +72,8 @@ jobs:
       - name: Validate plugin
         run: moodle-plugin-ci validate
 
-- name: Moodle Code Checker
-  run: moodle-plugin-ci codechecker --exclude=amd/build
+      - name: Moodle Code Checker
+        run: moodle-plugin-ci codechecker --exclude=amd/build
 
       - name: PHP Mess Detector
         run: moodle-plugin-ci phpmd
