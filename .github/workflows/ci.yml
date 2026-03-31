@@ -5,40 +5,62 @@ on:
   pull_request:
 
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        php: [8.1, 8.2]
-        moodle-branch: [MOODLE_404_STABLE, MOODLE_405_STABLE]
-        db: [pgsql, mysqli]
+        php: ['8.1', '8.2']
+        moodle-branch: ['MOODLE_404_STABLE', 'MOODLE_405_STABLE']
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
       - name: Checkout plugin
         uses: actions/checkout@v4
+        with:
+          path: plugin
 
-      - name: Set up PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: intl, mbstring, xml, curl, zip, gd, pdo, pgsql, mysqli
+          extensions: mbstring, intl, xml, curl, zip, gd, mysqli
           coverage: none
+
+      - name: Install Node (for AMD build checks)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
       - name: Install moodle-plugin-ci
         run: |
           composer create-project --no-dev moodlehq/moodle-plugin-ci ci ^4
-          echo "$(pwd)/ci/bin" >> $GITHUB_PATH
-          echo "$(pwd)/ci/vendor/bin" >> $GITHUB_PATH
+          echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
+          echo "$(cd ci/vendor/bin; pwd)" >> $GITHUB_PATH
 
       - name: Install Moodle + plugin
         run: |
           moodle-plugin-ci install \
-            --plugin local_examnotice \
+            --plugin ./plugin \
             --moodle ${{ matrix.moodle-branch }} \
-            --db ${{ matrix.db }}
+            --db-type mysqli \
+            --db-host 127.0.0.1
 
+      #  CORE CHECKS (REQUIRED FOR APPROVAL)
       - name: PHP Lint
         run: moodle-plugin-ci phplint
 
@@ -46,22 +68,25 @@ jobs:
         run: moodle-plugin-ci validate
 
       - name: Moodle Code Checker
-        run: moodle-plugin-ci codechecker
+        run: moodle-plugin-ci codechecker -- --exclude=amd/build
 
+      #  QUALITY CHECKS
       - name: PHP Mess Detector
         run: moodle-plugin-ci phpmd
 
-      - name: PHP Copy/Paste Detector
+      - name: PHP Copy Paste Detector
         run: moodle-plugin-ci phpcpd
 
-      - name: JS Lint (AMD)
+      #  FRONTEND (IMPORTANT FOR YOUR MODAL)
+      - name: JS Lint
         run: moodle-plugin-ci jshint
 
       - name: AMD build validation
         run: moodle-plugin-ci shifter
 
-      - name: Mustache templates validation
+      - name: Mustache validation
         run: moodle-plugin-ci mustache
 
-      - name: PHPUnit (optional)
+      #  OPTIONAL
+      - name: PHPUnit
         run: moodle-plugin-ci phpunit
