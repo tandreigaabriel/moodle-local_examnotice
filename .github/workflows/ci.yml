@@ -41,7 +41,7 @@ jobs:
           extensions: mbstring, intl, xml, curl, zip, gd, mysqli
           coverage: none
 
-      - name: Install Node (for AMD build checks)
+      - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -52,15 +52,20 @@ jobs:
           echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
           echo "$(cd ci/vendor/bin; pwd)" >> $GITHUB_PATH
 
+      - name: Wait for database
+        run: sleep 10
+
       - name: Install Moodle + plugin
         run: |
           moodle-plugin-ci install \
             --plugin ./plugin \
             --moodle ${{ matrix.moodle-branch }} \
             --db-type mysqli \
-            --db-host 127.0.0.1
+            --db-host 127.0.0.1 \
+            --branch ${{ github.ref_name }}
+        env:
+          DB: mysqli
 
-      #  CORE CHECKS (REQUIRED FOR APPROVAL)
       - name: PHP Lint
         run: moodle-plugin-ci phplint
 
@@ -70,14 +75,12 @@ jobs:
       - name: Moodle Code Checker
         run: moodle-plugin-ci codechecker -- --exclude=amd/build
 
-      #  QUALITY CHECKS
       - name: PHP Mess Detector
         run: moodle-plugin-ci phpmd
 
       - name: PHP Copy Paste Detector
         run: moodle-plugin-ci phpcpd
 
-      #  FRONTEND (IMPORTANT FOR YOUR MODAL)
       - name: JS Lint
         run: moodle-plugin-ci jshint
 
@@ -87,6 +90,5 @@ jobs:
       - name: Mustache validation
         run: moodle-plugin-ci mustache
 
-      #  OPTIONAL
       - name: PHPUnit
         run: moodle-plugin-ci phpunit
