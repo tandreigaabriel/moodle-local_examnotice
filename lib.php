@@ -32,10 +32,10 @@ defined('MOODLE_INTERNAL') || die();
  * Returns the default checklist HTML used before an admin saves custom content.
  */
 function local_examnotice_default_content(): string {
-    $setupurl    = get_config('local_examnotice', 'setup_url')     ?: '#';
+    $setupurl    = get_config('local_examnotice', 'setup_url') ?: '#';
     $roomscanurl = get_config('local_examnotice', 'room_scan_url') ?: '#';
-    $policyurl   = get_config('local_examnotice', 'policy_url')    ?: '#';
-    $qaurl       = get_config('local_examnotice', 'qa_url')        ?: '#';
+    $policyurl   = get_config('local_examnotice', 'policy_url') ?: '#';
+    $qaurl       = get_config('local_examnotice', 'qa_url') ?: '#';
 
     return '<ul class="en-list">'
         . '<li><span class="en-icon">🔐</span><span>Please ensure your <strong>Windows/iOS operating systems are up to date</strong> before the exam.</span></li>'

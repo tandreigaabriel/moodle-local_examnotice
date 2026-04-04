@@ -54,10 +54,10 @@ $config = (object)[
             ?: local_examnotice_default_content(),
         'format' => FORMAT_HTML,
     ],
-    'setup_url'     => get_config('local_examnotice', 'setup_url')     ?: '#',
+    'setup_url'     => get_config('local_examnotice', 'setup_url') ?: '#',
     'room_scan_url' => get_config('local_examnotice', 'room_scan_url') ?: '#',
-    'policy_url'    => get_config('local_examnotice', 'policy_url')    ?: '#',
-    'qa_url'        => get_config('local_examnotice', 'qa_url')        ?: '#',
+    'policy_url'    => get_config('local_examnotice', 'policy_url') ?: '#',
+    'qa_url'        => get_config('local_examnotice', 'qa_url') ?: '#',
 ];
 
 require_once($CFG->dirroot . '/local/examnotice/classes/form/notice_form.php');
