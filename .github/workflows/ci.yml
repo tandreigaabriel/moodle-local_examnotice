@@ -10,12 +10,11 @@ jobs:
       mariadb:
         image: mariadb:10.6
         env:
-          MYSQL_ROOT_PASSWORD: ''
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
@@ -53,8 +52,8 @@ jobs:
       - name: Initialise moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
-          echo $(cd ci/bin; pwd) >> $GITHUB_PATH
-          echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
+          echo "$(cd ci/bin && pwd)" >> $GITHUB_PATH
+          echo "$(cd ci/vendor/bin && pwd)" >> $GITHUB_PATH
 
       - name: Install Moodle
         run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
@@ -69,13 +68,11 @@ jobs:
         continue-on-error: true
         run: moodle-plugin-ci phpmd
 
-      #  FIXED: ignore built JS
+      #  FIXED:
       - name: Moodle Code Checker
-        run: |
-          moodle-plugin-ci phpcs --max-warnings 0 -- \
-            --exclude=local_examnotice/amd/build
+        run: moodle-plugin-ci phpcs --max-warnings 0 --exclude local_examnotice/amd/build
 
-      #  RELAXED: avoid failing on phpdoc for now
+      #  relaxed
       - name: Moodle PHPDoc Checker
         continue-on-error: true
         run: moodle-plugin-ci phpdoc
@@ -89,11 +86,9 @@ jobs:
       - name: Mustache Lint
         run: moodle-plugin-ci mustache
 
-      #  RELAXED: don't fail on minor JS warnings
       - name: Grunt (AMD build)
         run: moodle-plugin-ci grunt
 
-      #  OPTIONAL: don't fail pipeline if no tests
       - name: PHPUnit tests
         continue-on-error: true
         run: moodle-plugin-ci phpunit
