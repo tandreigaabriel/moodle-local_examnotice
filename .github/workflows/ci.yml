@@ -13,7 +13,6 @@ jobs:
         image: mariadb:10.6
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-          MYSQL_DATABASE: moodle
         ports:
           - 3306:3306
         options: >-
@@ -83,7 +82,7 @@ jobs:
       - name: Validate
         run: moodle-plugin-ci validate
 
-      # Check savepoints
+      # Check upgrade savepoints
       - name: Savepoints
         run: moodle-plugin-ci savepoints
 
@@ -91,7 +90,7 @@ jobs:
       - name: Mustache Lint
         run: moodle-plugin-ci mustache
 
-      # Build AMD (safe)
+      # Build AMD
       - name: Build AMD
         run: moodle-plugin-ci grunt
 
