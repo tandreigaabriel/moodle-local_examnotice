@@ -22,7 +22,7 @@
  *   - admin/manage.php                (admin preview tab)
  *
  * @package    local_examnotice
- * @copyright  2026 local_examnotice contributors
+ * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -17,7 +17,7 @@
  * AMD module for the exam notice debug/diagnostic page.
  *
  * @module     local_examnotice/debug
- * @copyright  2026 Andrei Gabriel
+ * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
