@@ -1,6 +1,8 @@
 name: Moodle Plugin CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
@@ -10,15 +12,15 @@ jobs:
       mariadb:
         image: mariadb:10.6
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_DATABASE: moodle
         ports:
           - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     strategy:
       fail-fast: false
@@ -32,11 +34,13 @@ jobs:
             database: mysqli
 
     steps:
-      - name: Check out repository code
+      # Checkout plugin
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           path: plugin
 
+      # PHP setup
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
@@ -45,42 +49,58 @@ jobs:
           ini-values: max_input_vars=5000
           coverage: none
 
+      # Node (for AMD build)
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Initialise moodle-plugin-ci
+      # Install moodle-plugin-ci
+      - name: Install moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
-          echo $(cd ci/bin; pwd) >> $GITHUB_PATH
-          echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
+          echo "$(cd ci/bin && pwd)" >> $GITHUB_PATH
+          echo "$(cd ci/vendor/bin && pwd)" >> $GITHUB_PATH
 
+      # Install Moodle + plugin
       - name: Install Moodle
         run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
+      # PHP lint
       - name: PHP Lint
         run: moodle-plugin-ci phplint
 
+      # Code checker (ignore built JS)
       - name: Moodle Code Checker
-        run: moodle-plugin-ci phpcs --max-warnings 0 -- \
-          --exclude=local_examnotice/amd/build
+        run: |
+          moodle-plugin-ci phpcs --max-warnings 0 -- \
+            --exclude=local_examnotice/amd/build
 
+      # Validate plugin
       - name: Validate
         run: moodle-plugin-ci validate
 
+      # Check savepoints
       - name: Savepoints
         run: moodle-plugin-ci savepoints
 
-      - name: Mustache
+      # Mustache templates
+      - name: Mustache Lint
         run: moodle-plugin-ci mustache
 
+      # Build AMD (safe)
       - name: Build AMD
         run: moodle-plugin-ci grunt
 
-      - name: PHPUnit (optional)
+      # PHPUnit (optional)
+      - name: PHPUnit
         continue-on-error: true
         run: moodle-plugin-ci phpunit
+
+      # Ensure cancelled jobs fail
+      - name: Fail cancelled jobs
+        if: ${{ cancelled() }}
+        run: exit 1
