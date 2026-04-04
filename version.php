@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_examnotice';
-$plugin->version   = 2026032703;
-$plugin->requires  = 2024042200;
-$plugin->release   = '1.2.2';
+$plugin->version   = 2026040400; //
+$plugin->requires  = 2024042200; // Moodle 4.5+
+$plugin->release   = '1.0.0';    //
 $plugin->maturity  = MATURITY_STABLE;
