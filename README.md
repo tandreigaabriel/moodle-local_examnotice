@@ -1,4 +1,4 @@
-# local_examnotice — Moodle Exam Notice Modal Plugin
+# local_examnotice — Moodle Exam Reminder Modal Plugin
 
 A Moodle local plugin that automatically shows a **preparation checklist modal** to
 students when a quiz is opening within a configurable number of days. Built and tested
@@ -10,8 +10,8 @@ on Moodle 4.5 with the Adaptable theme.
 
 | Item        | Version                           |
 |-------------|-----------------------------------|
-| Moodle      | 4.4+ (build 2024042200 or higher) |
-| PHP         | 8.1+                              |
+| Moodle      | 4.5+ (build 2024042200 or higher) |
+| PHP         | 8.1+ (tested up to PHP 8.3)                              |
 | Bootstrap   | 4 or 5 (auto-detected)            |
 
 ---
