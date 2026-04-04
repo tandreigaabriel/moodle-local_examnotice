@@ -18,7 +18,7 @@
  * English language strings for local_examnotice.
  *
  * @package    local_examnotice
- * @copyright  2026 Andrei Gabriel
+ * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
