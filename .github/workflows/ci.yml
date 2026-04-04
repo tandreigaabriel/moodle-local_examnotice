@@ -1,6 +1,6 @@
 name: Moodle Plugin CI
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   test:
@@ -10,14 +10,11 @@ jobs:
       mariadb:
         image: mariadb:10.6
         env:
+          MYSQL_ROOT_PASSWORD: ''
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         ports:
           - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
+        options: --health-cmd="mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 3
 
     strategy:
       fail-fast: false
@@ -52,8 +49,12 @@ jobs:
       - name: Initialise moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
-          echo "$(cd ci/bin && pwd)" >> $GITHUB_PATH
-          echo "$(cd ci/vendor/bin && pwd)" >> $GITHUB_PATH
+          echo $(cd ci/bin; pwd) >> $GITHUB_PATH
+          echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
+          sudo locale-gen en_AU.UTF-8
+
+      - name: Wait for DB
+        run: sleep 10
 
       - name: Install Moodle
         run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
@@ -62,36 +63,41 @@ jobs:
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
       - name: PHP Lint
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci phplint
 
       - name: PHP Mess Detector
         continue-on-error: true
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpmd
 
-      #  FIXED:
       - name: Moodle Code Checker
-        run: moodle-plugin-ci phpcs --max-warnings 0 --exclude local_examnotice/amd/build
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpcs --max-warnings 0
 
-      #  relaxed
       - name: Moodle PHPDoc Checker
-        continue-on-error: true
-        run: moodle-plugin-ci phpdoc
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpdoc --max-warnings 0
 
       - name: Validate
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci validate
 
       - name: Check upgrade savepoints
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci savepoints
 
       - name: Mustache Lint
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci mustache
 
       - name: Grunt (AMD build)
-        run: moodle-plugin-ci grunt
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci grunt --max-lint-warnings 0
 
       - name: PHPUnit tests
-        continue-on-error: true
-        run: moodle-plugin-ci phpunit
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpunit --fail-on-warning
 
       - name: Mark cancelled jobs as failed
         if: ${{ cancelled() }}
