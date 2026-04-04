@@ -26,31 +26,47 @@ namespace local_examnotice\form;
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
 require_once($CFG->libdir . '/formslib.php');
 
+/**
+ * Settings form for exam notice plugin.
+ */
 class notice_form extends \moodleform {
 
+    /**
+     * Define form elements.
+     *
+     * @return void
+     */
     public function definition() {
         $mform = $this->_form;
 
-        // ── General ───────────────────────────────────────────────────────────
+        // General settings.
         $mform->addElement('header', 'hdr_general', get_string('settings', 'local_examnotice'));
 
         $mform->addElement('advcheckbox', 'enabled', get_string('enabled', 'local_examnotice'));
         $mform->setType('enabled', PARAM_BOOL);
 
-        $mform->addElement('text', 'days_before',
-            get_string('days_before', 'local_examnotice'), ['size' => 4]);
+        $mform->addElement(
+            'text',
+            'days_before',
+            get_string('days_before', 'local_examnotice'),
+            ['size' => 4]
+        );
         $mform->setType('days_before', PARAM_INT);
         $mform->addRule('days_before', null, 'required', null, 'client');
-        $mform->addRule('days_before', null, 'numeric',  null, 'client');
+        $mform->addRule('days_before', null, 'numeric', null, 'client');
 
-        // ── Modal Content ─────────────────────────────────────────────────────
-        $mform->addElement('header', 'hdr_content',
-            get_string('content_tab', 'local_examnotice'));
+        // Modal content.
+        $mform->addElement('header', 'hdr_content', get_string('content_tab', 'local_examnotice'));
 
-        $mform->addElement('text', 'modal_title',
-            get_string('modal_title', 'local_examnotice'), ['size' => 60]);
+        $mform->addElement(
+            'text',
+            'modal_title',
+            get_string('modal_title', 'local_examnotice'),
+            ['size' => 60]
+        );
         $mform->setType('modal_title', PARAM_TEXT);
 
         $editoroptions = [
@@ -59,6 +75,7 @@ class notice_form extends \moodleform {
             'trusttext' => false,
             'context'   => \context_system::instance(),
         ];
+
         $mform->addElement(
             'editor',
             'modal_content_editor',
@@ -68,25 +85,41 @@ class notice_form extends \moodleform {
         );
         $mform->setType('modal_content_editor', PARAM_RAW);
 
-        // ── Links ─────────────────────────────────────────────────────────────
+        // Links.
         $mform->addElement('header', 'hdr_links', get_string('links_header', 'local_examnotice'));
 
         $urlfields = ['setup_url', 'room_scan_url', 'policy_url', 'qa_url'];
         foreach ($urlfields as $field) {
-            $mform->addElement('text', $field,
-                get_string($field, 'local_examnotice'), ['size' => 80]);
+            $mform->addElement(
+                'text',
+                $field,
+                get_string($field, 'local_examnotice'),
+                ['size' => 80]
+            );
             $mform->setType($field, PARAM_URL);
         }
 
         $this->add_action_buttons(false, get_string('savechanges', 'local_examnotice'));
     }
 
+    /**
+     * Validate form data.
+     *
+     * @param array $data
+     * @param array $files
+     * @return array
+     */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-        $days = (int)$data['days_before'];
+
+        $days = (int) $data['days_before'];
         if ($days < 1 || $days > 90) {
-            $errors['days_before'] = get_string('days_before_range_error', 'local_examnotice');
+            $errors['days_before'] = get_string(
+                'days_before_range_error',
+                'local_examnotice'
+            );
         }
+
         return $errors;
     }
 }
