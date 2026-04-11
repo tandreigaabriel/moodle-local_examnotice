@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Upgrade steps for local_examnotice.
+ *
+ * @package    local_examnotice
+ * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -23,8 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param int  $oldversion The old version of the plugin.
  * @return bool
  */
-function xmldb_local_examnotice_upgrade($oldversion)
-{
+function xmldb_local_examnotice_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();

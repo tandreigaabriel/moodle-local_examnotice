@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Privacy provider for local_examnotice.
+ *
+ * @package    local_examnotice
+ * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_examnotice\privacy;
 
 use core_privacy\local\metadata\collection;
@@ -33,15 +41,13 @@ class provider implements
     \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\request\plugin\provider
 {
-
     /**
      * Declare the personal data stored in local_examnotice_seen.
      *
      * @param collection $collection
      * @return collection
      */
-    public static function get_metadata(collection $collection): collection
-    {
+    public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(
             'local_examnotice_seen',
             [
@@ -64,8 +70,7 @@ class provider implements
      * @param int $userid
      * @return contextlist
      */
-    public static function get_contexts_for_userid(int $userid): contextlist
-    {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
 
         $sql = "SELECT ctx.id
@@ -87,8 +92,7 @@ class provider implements
      *
      * @param userlist $userlist
      */
-    public static function get_users_in_context(userlist $userlist): void
-    {
+    public static function get_users_in_context(userlist $userlist): void {
         $context = $userlist->get_context();
 
         if ($context->contextlevel !== CONTEXT_COURSE) {
@@ -107,8 +111,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist
      */
-    public static function export_user_data(approved_contextlist $contextlist): void
-    {
+    public static function export_user_data(approved_contextlist $contextlist): void {
         global $DB;
 
         $userid = $contextlist->get_user()->id;
@@ -137,8 +140,7 @@ class provider implements
      *
      * @param \context $context
      */
-    public static function delete_data_for_all_users_in_context(\context $context): void
-    {
+    public static function delete_data_for_all_users_in_context(\context $context): void {
         global $DB;
 
         if ($context->contextlevel !== CONTEXT_COURSE) {
@@ -155,8 +157,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist
      */
-    public static function delete_data_for_user(approved_contextlist $contextlist): void
-    {
+    public static function delete_data_for_user(approved_contextlist $contextlist): void {
         global $DB;
 
         $userid = $contextlist->get_user()->id;
@@ -178,8 +179,7 @@ class provider implements
      *
      * @param approved_userlist $userlist
      */
-    public static function delete_data_for_users(approved_userlist $userlist): void
-    {
+    public static function delete_data_for_users(approved_userlist $userlist): void {
         global $DB;
 
         $context = $userlist->get_context();

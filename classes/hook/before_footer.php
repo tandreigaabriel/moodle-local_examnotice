@@ -31,7 +31,6 @@ namespace local_examnotice\hook;
  */
 class before_footer
 {
-
     /**
      * Hook callback for core\hook\output\before_footer_html_generation.
      *
@@ -140,7 +139,7 @@ class before_footer
                 [
                     'quizid' => (int) $quiz->id,
                     'ispreview' => false,
-                ]
+                ],
             ]);
 
             return;
