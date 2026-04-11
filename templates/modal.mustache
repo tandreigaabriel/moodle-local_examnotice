@@ -51,7 +51,10 @@
 
       <!-- HEADER -->
       <div class="en-header">
-        <h4 class="en-title" id="examNoticeModalLabel">{{title}}</h4>
+        <h4 class="en-title" id="examNoticeModalLabel">
+    {{#title}}{{title}}{{/title}}
+    {{^title}}Exam Preparation Instructions{{/title}}
+</h4>
       </div>
 
       <!-- BODY -->
