@@ -22,19 +22,16 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-function xmldb_local_examnotice_upgrade($oldversion) {
+function xmldb_local_examnotice_upgrade($oldversion)
+{
     global $DB;
 
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2026022704) {
-
         $table = new xmldb_table('local_examnotice_seen');
 
         if (!$dbman->table_exists($table)) {
-
             $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE);
             $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
             $table->add_field('quizid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
@@ -55,14 +52,12 @@ function xmldb_local_examnotice_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026032702) {
-        // Version bump: External Services (db/services.php) added.
-        // No schema changes — Moodle re-reads services.php on version bump.
+        // Version bump: External services added.
         upgrade_plugin_savepoint(true, 2026032702, 'local', 'examnotice');
     }
 
     if ($oldversion < 2026032703) {
-        // Version bump: dismiss.php removed; debug.js AMD module added.
-        // No schema changes.
+        // Version bump: debug module added.
         upgrade_plugin_savepoint(true, 2026032703, 'local', 'examnotice');
     }
 
