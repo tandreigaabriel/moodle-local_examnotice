@@ -16,17 +16,21 @@
 #examNoticeModal .en-header::before {
     content: "";
     position: absolute;
-    top: -40px; right: -40px;
-    width: 140px; height: 140px;
-    background: rgba(255,255,255,0.06);
+    top: -40px;
+    right: -40px;
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 50%;
 }
 #examNoticeModal .en-header::after {
     content: "";
     position: absolute;
-    bottom: -30px; left: 20px;
-    width: 90px; height: 90px;
-    background: rgba(255,255,255,0.04);
+    bottom: -30px;
+    left: 20px;
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.04);
     border-radius: 50%;
 }
 #examNoticeModal .en-title {
@@ -138,12 +142,12 @@
     font-weight: 600;
     cursor: pointer;
     transition: all .2s;
-    box-shadow: 0 3px 10px rgba(45,122,45,0.35);
+    box-shadow: 0 3px 10px rgba(45, 122, 45, 0.35);
     letter-spacing: 0.2px;
 }
 #examNoticeModal .en-btn-confirm:hover {
     background: linear-gradient(135deg, #0f3010, #236023);
-    box-shadow: 0 4px 14px rgba(45,122,45,0.45);
+    box-shadow: 0 4px 14px rgba(45, 122, 45, 0.45);
     transform: translateY(-1px);
 }
 #examNoticeModal .en-btn-confirm:disabled {
@@ -154,6 +158,6 @@
 #examNoticeModal .modal-content {
     border: none;
     border-radius: .5rem;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 6px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 6px 20px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
