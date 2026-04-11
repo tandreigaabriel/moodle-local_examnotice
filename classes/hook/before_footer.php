@@ -24,7 +24,13 @@
 
 namespace local_examnotice\hook;
 
-class before_footer {
+/**
+ * Before footer hook handler.
+ *
+ * @package local_examnotice
+ */
+class before_footer
+{
     /**
      * Hook callback for core\hook\output\before_footer_html_generation.
      *
@@ -64,8 +70,8 @@ class before_footer {
         }
 
         $daysbefore = (int) (get_config('local_examnotice', 'days_before') ?: 7);
-        $now        = time();
-        $cutoff     = $now + ($daysbefore * DAYSECS);
+        $now = time();
+        $cutoff = $now + ($daysbefore * DAYSECS);
 
         $sql = "SELECT q.id, q.name, q.timeopen
                   FROM {quiz} q
@@ -79,8 +85,8 @@ class before_footer {
 
         $quizzes = $DB->get_records_sql($sql, [
             'courseid' => $COURSE->id,
-            'now'      => $now,
-            'cutoff'   => $cutoff,
+            'now' => $now,
+            'cutoff' => $cutoff,
         ]);
 
         if (empty($quizzes)) {
@@ -113,16 +119,16 @@ class before_footer {
             }
 
             $daysuntil = max(1, (int) ceil(($quiz->timeopen - $now) / DAYSECS));
-            $examdate  = userdate(
+            $examdate = userdate(
                 $quiz->timeopen,
                 get_string('strftimedatefullshort', 'langconfig')
             );
 
             $data = (object) [
-                'quizid'    => $quiz->id,
-                'name'      => $quiz->name,
-                'days'      => $daysuntil,
-                'date'      => $examdate,
+                'quizid' => $quiz->id,
+                'name' => $quiz->name,
+                'days' => $daysuntil,
+                'date' => $examdate,
                 'ispreview' => false,
             ];
 
@@ -136,10 +142,12 @@ class before_footer {
                 local_examnotice_build_modal_html($data, $modaltitle, $modalcontent)
             );
 
-            $PAGE->requires->js_call_amd('local_examnotice/modal', 'init', [[
-                'quizid'    => (int) $quiz->id,
-                'ispreview' => false,
-            ]]);
+            $PAGE->requires->js_call_amd('local_examnotice/modal', 'init', [
+                [
+                    'quizid' => (int) $quiz->id,
+                    'ispreview' => false,
+                ]
+            ]);
 
             return;
         }

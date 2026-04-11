@@ -29,8 +29,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * External function to dismiss or confirm an exam preparation notice.
  */
