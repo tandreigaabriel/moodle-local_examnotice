@@ -14,21 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-/**
- * Upgrade steps for local_examnotice.
- *
- * @package    local_examnotice
- * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Upgrade the local_examnotice plugin.
  *
- * @param int $oldversion The old version of the plugin.
+ * @package    local_examnotice
+ * @param int  $oldversion The old version of the plugin.
  * @return bool
  */
-function xmldb_local_examnotice_upgrade($oldversion) {
+function xmldb_local_examnotice_upgrade($oldversion)
+{
     global $DB;
 
     $dbman = $DB->get_manager();
@@ -57,14 +53,10 @@ function xmldb_local_examnotice_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026032702) {
-        // Version bump: External Services (db/services.php) added.
-        // No schema changes — Moodle re-reads services.php on version bump.
         upgrade_plugin_savepoint(true, 2026032702, 'local', 'examnotice');
     }
 
     if ($oldversion < 2026032703) {
-        // Version bump: dismiss.php removed; debug.js AMD module added.
-        // No schema changes.
         upgrade_plugin_savepoint(true, 2026032703, 'local', 'examnotice');
     }
 
