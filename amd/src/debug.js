@@ -21,16 +21,28 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['core/log'], function (Log) {
+define(['core/log'], function(Log) {
 
+    /**
+     * Update a check element with a yes/no result.
+     *
+     * @param {string} id  Element ID.
+     * @param {boolean} ok True if the check passed.
+     * @param {string} msg Optional detail message.
+     */
     function set_check(id, ok, msg) {
         var el = document.getElementById(id);
         if (el) {
-            // FIXED: no innerHTML
             el.textContent = (ok ? 'YES' : 'NO') + (msg ? ' - ' + msg : '');
         }
     }
 
+    /**
+     * Display a result message in the test result area.
+     *
+     * @param {string} msg The message to display.
+     * @param {boolean} ok True for success, false for failure.
+     */
     function show_result(msg, ok) {
         var el = document.getElementById('testResult');
         el.style.display = 'block';
@@ -38,13 +50,18 @@ define(['core/log'], function (Log) {
         el.textContent = msg;
     }
 
+    /**
+     * Capture browser console output and echo it into the on-page log element.
+     */
     function capture_console() {
         var log = document.getElementById('consoleLog');
-        ['log', 'warn', 'error'].forEach(function (level) {
+        ['log', 'warn', 'error'].forEach(function(level) {
+            // eslint-disable-next-line no-console
             var orig = console[level].bind(console);
-            console[level] = function () {
+            // eslint-disable-next-line no-console
+            console[level] = function() {
                 orig.apply(console, arguments);
-                var msg = Array.from(arguments).map(function (a) {
+                var msg = Array.from(arguments).map(function(a) {
                     try {
                         return typeof a === 'object' ? JSON.stringify(a) : String(a);
                     } catch (e) {
@@ -57,7 +74,7 @@ define(['core/log'], function (Log) {
     }
 
     return {
-        init: function () {
+        init: function() {
             capture_console();
 
             set_check('chk-require', typeof window.require !== 'undefined');
@@ -73,11 +90,11 @@ define(['core/log'], function (Log) {
                 return;
             }
 
-            window.require(['local_examnotice/modal'], function (modal) {
+            window.require(['local_examnotice/modal'], function(modal) {
                 set_check('chk-amd', true, 'module loaded');
                 Log.debug('local_examnotice/debug: AMD modal module loaded OK');
 
-                document.getElementById('openTestModal').addEventListener('click', function () {
+                document.getElementById('openTestModal').addEventListener('click', function() {
                     show_result('Modal opened -- try clicking both buttons inside it', true);
                     modal.init({
                         quizid: 0,
@@ -85,7 +102,7 @@ define(['core/log'], function (Log) {
                     });
                 });
 
-            }, function (err) {
+            }, function(err) {
                 set_check('chk-amd', false, JSON.stringify(err));
                 show_result('AMD module failed to load: ' + JSON.stringify(err), false);
                 Log.error('local_examnotice/debug: AMD load error', err);
