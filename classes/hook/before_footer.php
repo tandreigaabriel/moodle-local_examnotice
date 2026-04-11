@@ -31,6 +31,7 @@ namespace local_examnotice\hook;
  */
 class before_footer
 {
+
     /**
      * Hook callback for core\hook\output\before_footer_html_generation.
      *
@@ -42,7 +43,6 @@ class before_footer
     ): void {
         global $PAGE, $DB, $USER, $COURSE, $CFG;
 
-        // Load helper functions here (not at file level).
         require_once($CFG->dirroot . '/local/examnotice/lib.php');
 
         if (!get_config('local_examnotice', 'enabled')) {
@@ -93,13 +93,8 @@ class before_footer
             return;
         }
 
-        // Bulk-load seen records to avoid N+1 queries.
         $quizids = array_keys($quizzes);
-        [$insql, $inparams] = $DB->get_in_or_equal(
-            $quizids,
-            SQL_PARAMS_NAMED,
-            'qid'
-        );
+        [$insql, $inparams] = $DB->get_in_or_equal($quizids, SQL_PARAMS_NAMED, 'qid');
         $inparams['uid'] = $USER->id;
 
         $seenmap = $DB->get_records_select(
@@ -113,7 +108,6 @@ class before_footer
         foreach ($quizzes as $quiz) {
             $seen = $seenmap[$quiz->id] ?? null;
 
-            // Status 1 = confirmed — never show again.
             if ($seen && $seen->status == 1) {
                 continue;
             }
