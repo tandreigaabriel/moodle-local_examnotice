@@ -22,8 +22,9 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function xmldb_local_examnotice_upgrade($oldversion)
-{
+defined('MOODLE_INTERNAL') || die();
+
+function xmldb_local_examnotice_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
@@ -52,12 +53,14 @@ function xmldb_local_examnotice_upgrade($oldversion)
     }
 
     if ($oldversion < 2026032702) {
-        // Version bump: External services added.
+        // Version bump: External Services (db/services.php) added.
+        // No schema changes — Moodle re-reads services.php on version bump.
         upgrade_plugin_savepoint(true, 2026032702, 'local', 'examnotice');
     }
 
     if ($oldversion < 2026032703) {
-        // Version bump: debug module added.
+        // Version bump: dismiss.php removed; debug.js AMD module added.
+        // No schema changes.
         upgrade_plugin_savepoint(true, 2026032703, 'local', 'examnotice');
     }
 

@@ -33,7 +33,6 @@ require_once($CFG->libdir . '/formslib.php');
  * Settings form for exam notice plugin.
  */
 class notice_form extends \moodleform {
-
     /**
      * Define form elements.
      *

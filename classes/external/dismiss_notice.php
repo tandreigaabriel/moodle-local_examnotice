@@ -35,7 +35,6 @@ defined('MOODLE_INTERNAL') || die();
  * External function to dismiss or confirm an exam preparation notice.
  */
 class dismiss_notice extends external_api {
-
     /**
      * Parameter definition.
      *
@@ -43,7 +42,7 @@ class dismiss_notice extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'quizid' => new external_value(PARAM_INT,   'The ID of the quiz'),
+            'quizid' => new external_value(PARAM_INT, 'The ID of the quiz'),
             'action' => new external_value(PARAM_ALPHA, 'Action: confirm or dismiss'),
         ]);
     }

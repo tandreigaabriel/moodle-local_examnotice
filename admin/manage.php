@@ -65,14 +65,14 @@ $form = new \local_examnotice\form\notice_form();
 $form->set_data($config);
 
 if ($data = $form->get_data()) {
-    set_config('enabled',       (int)$data->enabled,                         'local_examnotice');
-    set_config('days_before',   (int)$data->days_before,                     'local_examnotice');
-    set_config('modal_title',   clean_param($data->modal_title, PARAM_TEXT), 'local_examnotice');
-    set_config('modal_content', $data->modal_content_editor['text'],          'local_examnotice');
-    set_config('setup_url',     $data->setup_url,                             'local_examnotice');
-    set_config('room_scan_url', $data->room_scan_url,                         'local_examnotice');
-    set_config('policy_url',    $data->policy_url,                            'local_examnotice');
-    set_config('qa_url',        $data->qa_url,                                'local_examnotice');
+    set_config('enabled', (int)$data->enabled, 'local_examnotice');
+    set_config('days_before', (int)$data->days_before, 'local_examnotice');
+    set_config('modal_title', clean_param($data->modal_title, PARAM_TEXT), 'local_examnotice');
+    set_config('modal_content', $data->modal_content_editor['text'], 'local_examnotice');
+    set_config('setup_url', $data->setup_url, 'local_examnotice');
+    set_config('room_scan_url', $data->room_scan_url, 'local_examnotice');
+    set_config('policy_url', $data->policy_url, 'local_examnotice');
+    set_config('qa_url', $data->qa_url, 'local_examnotice');
 
     \core\notification::success(get_string('changessaved'));
     redirect($PAGE->url);
@@ -96,14 +96,15 @@ $tabs = [
 echo $OUTPUT->tabtree($tabs, $tab);
 
 if ($tab === 'preview') {
-
-    echo html_writer::tag('p',
+    echo html_writer::tag(
+        'p',
         get_string('preview_note', 'local_examnotice'),
         ['class' => 'alert alert-info']
     );
 
     echo html_writer::div(
-        html_writer::tag('button',
+        html_writer::tag(
+            'button',
             get_string('open_preview', 'local_examnotice'),
             ['class' => 'btn btn-primary btn-lg', 'id' => 'examNoticePreviewBtn']
         ),
@@ -127,7 +128,6 @@ if ($tab === 'preview') {
         ?: local_examnotice_default_content();
 
     echo local_examnotice_build_modal_html($previewdata, $modaltitle, $modalcontent);
-
 } else {
     $form->display();
 }
