@@ -29,8 +29,7 @@
  * @param int  $oldversion The old version of the plugin.
  * @return bool
  */
-function xmldb_local_examnotice_upgrade($oldversion)
-{
+function xmldb_local_examnotice_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
