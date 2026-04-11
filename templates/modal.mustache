@@ -19,25 +19,25 @@
 }}
 
 {{!
-    @template local_examnotice/modal
+@template local_examnotice/modal
 
-    Exam preparation notice modal.
+Exam preparation notice modal.
 
-    Context variables:
-    * title   - Modal heading text (auto-escaped)
-    * name    - Quiz name (auto-escaped)
-    * days    - Integer: days until quiz opens
-    * date    - Formatted date string (auto-escaped)
-    * content - Raw HTML body content (admin-configured, rendered as-is)
+Context variables:
+* title   - Modal heading text
+* name    - Quiz name
+* days    - Days until quiz
+* date    - Formatted date
+* content - HTML content
 
-    Example context (JSON):
-    {
-        "title": "Exam Preparation Instructions",
-        "name": "Semester 1 Anatomy Exam",
-        "days": 5,
-        "date": "28 Mar 2026",
-        "content": "<ul><li>Please ensure your operating system is up to date.</li></ul>"
-    }
+Example context (json):
+{
+    "title": "Exam Preparation Instructions",
+    "name": "Semester 1 Anatomy Exam",
+    "days": 5,
+    "date": "28 Mar 2026",
+    "content": "<p>Please ensure your system is ready.</p>"
+}
 }}
 
 <!-- local_examnotice -->
@@ -51,10 +51,7 @@
 
       <!-- HEADER -->
       <div class="en-header">
-        <h4 class="en-title" id="examNoticeModalLabel">
-    {{#title}}{{title}}{{/title}}
-    {{^title}}Exam Preparation Instructions{{/title}}
-</h4>
+        <h4 class="en-title" id="examNoticeModalLabel">{{title}}{{^title}}Exam Preparation Instructions{{/title}}</h4>
       </div>
 
       <!-- BODY -->
