@@ -30,14 +30,14 @@
     * date    - Formatted date string (auto-escaped)
     * content - Raw HTML body content (admin-configured, rendered as-is)
 
-    Example context (PHP):
-    [
-        'title'   => 'Exam Preparation Instructions',
-        'name'    => 'Semester 1 Anatomy Exam',
-        'days'    => 5,
-        'date'    => '28 Mar 2026',
-        'content' => '<ul>...</ul>',
-    ]
+    Example context (JSON):
+    {
+        "title": "Exam Preparation Instructions",
+        "name": "Semester 1 Anatomy Exam",
+        "days": 5,
+        "date": "28 Mar 2026",
+        "content": "<ul><li>Please ensure your operating system is up to date.</li></ul>"
+    }
 }}
 
 <!-- local_examnotice -->
