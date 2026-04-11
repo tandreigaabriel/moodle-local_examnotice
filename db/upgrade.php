@@ -22,8 +22,12 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Upgrade the local_examnotice plugin.
+ *
+ * @param int $oldversion The old version of the plugin.
+ * @return bool
+ */
 function xmldb_local_examnotice_upgrade($oldversion) {
     global $DB;
 

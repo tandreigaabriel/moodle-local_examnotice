@@ -31,9 +31,17 @@ use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
-defined('MOODLE_INTERNAL') || die();
-
-class provider implements \core_privacy\local\metadata\provider, \core_privacy\local\request\core_userlist_provider, \core_privacy\local\request\plugin\provider {
+/**
+ * Privacy provider for the local_examnotice plugin.
+ *
+ * @package    local_examnotice
+ * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
     /**
      * Declare the personal data stored in local_examnotice_seen.
      */
