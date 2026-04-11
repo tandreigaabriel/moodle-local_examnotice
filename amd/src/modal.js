@@ -17,7 +17,6 @@
  * AMD module for the exam notice modal.
  *
  * @module     local_examnotice/modal
- * @package    local_examnotice
  * @copyright  2026 Andrei Toma <https://www.tagwebdesign.co.uk>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,10 +24,10 @@
 /* eslint-env browser */
 /* global define */
 
-define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
+define(["jquery", "core/log", "core/ajax"], function($, Log, Ajax) {
 
     return {
-        init: function (params) {
+        init: function(params) {
 
             var el = document.getElementById("examNoticeModal");
             if (!el) {
@@ -38,6 +37,9 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
 
             var bsm = null;
 
+            /**
+             * Show the exam notice modal using Bootstrap 5, Bootstrap 4 jQuery, or plain CSS.
+             */
             function show() {
                 if (window.bootstrap && window.bootstrap.Modal) {
                     bsm = new window.bootstrap.Modal(el, {
@@ -46,7 +48,7 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
                     });
                     bsm.show();
                 } else if (typeof $(el).modal === "function") {
-                    $(el).modal({ backdrop: "static", keyboard: false });
+                    $(el).modal({backdrop: "static", keyboard: false});
                     $(el).modal("show");
                 } else {
                     el.style.display = "block";
@@ -55,6 +57,9 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
                 }
             }
 
+            /**
+             * Hide the exam notice modal.
+             */
             function hide() {
                 if (bsm) {
                     bsm.hide();
@@ -67,6 +72,12 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
                 }
             }
 
+            /**
+             * Send a dismiss/confirm action to the server via AJAX.
+             *
+             * @param {string} action Either "confirm" or "dismiss".
+             * @returns {Promise} Resolved with the server response.
+             */
             function sendAction(action) {
                 return Ajax.call([{
                     methodname: "local_examnotice_dismiss_notice",
@@ -77,6 +88,9 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
                 }])[0];
             }
 
+            /**
+             * Handle the confirm button click.
+             */
             function handleConfirm() {
                 if (params.ispreview) {
                     hide();
@@ -93,7 +107,7 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
                 btn.textContent = "Saving...";
 
                 sendAction("confirm")
-                    .then(function (resp) {
+                    .then(function(resp) {
                         if (resp.success) {
                             hide();
                         } else {
@@ -101,30 +115,32 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
                             btn.textContent = originalText;
                         }
                     })
-                    .catch(function () {
+                    .catch(function() {
                         btn.disabled = false;
                         btn.textContent = originalText;
                     });
             }
 
+            /**
+             * Handle the dismiss button click.
+             */
             function handleDismiss() {
                 if (params.ispreview) {
                     hide();
                     return;
                 }
 
-                // FIXED: 
                 sendAction("dismiss")
-                    .then(function () {
+                    .then(function() {
                         hide();
                     })
-                    .catch(function () {
+                    .catch(function() {
                         hide();
                     });
             }
 
             // Delegated events
-            el.addEventListener("click", function (e) {
+            el.addEventListener("click", function(e) {
                 var target = e.target.closest("#examNoticeConfirm, #examNoticeDismiss");
                 if (!target) {
                     return;
@@ -142,14 +158,14 @@ define(["jquery", "core/log", "core/ajax"], function ($, Log, Ajax) {
             var previewBtn = document.getElementById("examNoticePreviewBtn");
 
             if (previewBtn) {
-                previewBtn.addEventListener("click", function (e) {
+                previewBtn.addEventListener("click", function(e) {
 
                     e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
 
                     // Delay to override Moodle drawer behaviour
-                    setTimeout(function () {
+                    setTimeout(function() {
 
                         // Force close drawer
                         document.body.classList.remove("drawer-open-right");
