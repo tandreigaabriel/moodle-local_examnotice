@@ -32,10 +32,10 @@
  * @return string
  */
 function local_examnotice_default_content(): string {
-    $setupurl    = get_config('local_examnotice', 'setup_url') ?: '#';
-    $roomscanurl = get_config('local_examnotice', 'room_scan_url') ?: '#';
-    $policyurl   = get_config('local_examnotice', 'policy_url') ?: '#';
-    $qaurl       = get_config('local_examnotice', 'qa_url') ?: '#';
+    $setupurl    = s(get_config('local_examnotice', 'setup_url') ?: '#');
+    $roomscanurl = s(get_config('local_examnotice', 'room_scan_url') ?: '#');
+    $policyurl   = s(get_config('local_examnotice', 'policy_url') ?: '#');
+    $qaurl       = s(get_config('local_examnotice', 'qa_url') ?: '#');
 
     return '<ul class="en-list">'
         . '<li><span class="en-icon">🔐</span><span>'
@@ -86,13 +86,20 @@ function local_examnotice_default_content(): string {
  * @return string
  */
 function local_examnotice_build_modal_html(object $data, string $title, string $content): string {
-    global $OUTPUT;
+    global $OUTPUT, $PAGE;
+
+    $context = $PAGE->context;
 
     return $OUTPUT->render_from_template('local_examnotice/modal', [
         'title'   => $title,
-        'name'    => $data->name,
+        'name'    => format_string($data->name, true, ['context' => $context, 'escape' => false]), // Mustache {{name}} escapes.
         'days'    => (int) $data->days,
         'date'    => $data->date,
-        'content' => $content,
+        'content' => format_text($content, FORMAT_HTML, [
+            'context' => $context,
+            'trusted' => false,
+            'noclean' => false,
+            'filter' => false,
+        ]),
     ]);
 }

@@ -44,7 +44,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Install moodle-plugin-ci
         run: |
@@ -59,13 +59,25 @@ jobs:
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
       - name: PHPCS
-        run: moodle-plugin-ci phpcs --max-warnings 0
+        run: moodle-plugin-ci phpcs ./plugin --max-warnings 0
 
       - name: Validate
-        run: moodle-plugin-ci validate
+        run: moodle-plugin-ci validate ./plugin
 
       - name: Mustache
-        run: moodle-plugin-ci mustache
+        run: moodle-plugin-ci mustache ./plugin
 
       - name: Grunt
-        run: moodle-plugin-ci grunt
+        run: moodle-plugin-ci grunt ./plugin
+
+      - name: PHP Lint
+        run: moodle-plugin-ci phplint ./plugin
+
+      - name: PHPDoc
+        run: moodle-plugin-ci phpdoc ./plugin --max-warnings 0
+
+      - name: Savepoints
+        run: moodle-plugin-ci savepoints ./plugin
+
+      - name: PHPUnit
+        run: moodle-plugin-ci phpunit ./plugin

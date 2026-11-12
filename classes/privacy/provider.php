@@ -184,7 +184,7 @@ class provider implements
 
         $context = $userlist->get_context();
 
-        if ($context->contextlevel !== CONTEXT_COURSE) {
+        if ($context->contextlevel !== CONTEXT_COURSE || empty($userlist->get_userids())) {
             return;
         }
 
