@@ -12,6 +12,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ''
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+          MYSQL_CHARACTER_SET_SERVER: "utf8mb4"
+          MYSQL_COLLATION_SERVER: "utf8mb4_unicode_ci"
         ports:
           - 3306:3306
         options: >-
@@ -26,7 +28,7 @@ jobs:
         include:
           - php: '8.2'
             moodle-branch: 'MOODLE_405_STABLE'
-            database: mysqli
+            database: mariadb
 
     steps:
       - name: Checkout plugin
@@ -39,12 +41,16 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, intl, xml, curl, zip, gd, mysqli
+          ini-values: max_input_vars=5000
           coverage: none
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
+
+      - name: Install locale required by Moodle PHPUnit
+        run: sudo locale-gen en_AU.UTF-8
 
       - name: Install moodle-plugin-ci
         run: |
@@ -69,3 +75,15 @@ jobs:
 
       - name: Grunt
         run: moodle-plugin-ci grunt
+
+      - name: PHP Lint
+        run: moodle-plugin-ci phplint
+
+      - name: PHPDoc
+        run: moodle-plugin-ci phpdoc --max-warnings 0
+
+      - name: Savepoints
+        run: moodle-plugin-ci savepoints
+
+      - name: PHPUnit
+        run: moodle-plugin-ci phpunit
