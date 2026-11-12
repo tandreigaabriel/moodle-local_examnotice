@@ -104,7 +104,16 @@ class before_footer
             'quizid, status'
         );
 
+        $modinfo = get_fast_modinfo($COURSE, $USER->id);
         foreach ($quizzes as $quiz) {
+            $cm = $modinfo->instances['quiz'][$quiz->id] ?? null;
+            if (
+                !$cm || !$cm->uservisible || !$cm->available ||
+                    !has_capability('mod/quiz:view', \context_module::instance($cm->id))
+            ) {
+                continue;
+            }
+
             $seen = $seenmap[$quiz->id] ?? null;
 
             if ($seen && $seen->status == 1) {

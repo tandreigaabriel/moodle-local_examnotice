@@ -211,3 +211,10 @@ rm /var/www/html/moodle/local/examnotice/admin/debug.php
 ## License
 
 GNU GPL v3 — same as Moodle core.
+
+## Changelog
+
+### 1.0.1
+
+- Harden notice rendering and activity access checks.
+- Add security and privacy regression coverage.

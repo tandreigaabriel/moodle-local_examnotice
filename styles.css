@@ -85,17 +85,17 @@
     font-size: .93rem;
     color: #2a2a2a;
     line-height: 1.5;
-    display: flex;
-    align-items: flex-start;
-    gap: .5rem;
+    position: relative;
+    padding-left: 1.75rem;
 }
 #examNoticeModal .en-list li:last-child {
     border-bottom: none;
 }
 #examNoticeModal .en-list li .en-icon {
+    position: absolute;
+    left: 0;
+    top: .45rem;
     font-size: 1rem;
-    flex-shrink: 0;
-    margin-top: 1px;
 }
 #examNoticeModal .en-list a {
     color: #2d7a2d;
