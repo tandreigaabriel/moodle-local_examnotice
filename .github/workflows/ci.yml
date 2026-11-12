@@ -26,7 +26,7 @@ jobs:
         include:
           - php: '8.2'
             moodle-branch: 'MOODLE_405_STABLE'
-            database: mysqli
+            database: mariadb
 
     steps:
       - name: Checkout plugin
