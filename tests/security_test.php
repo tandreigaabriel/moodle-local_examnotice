@@ -171,7 +171,7 @@ final class security_test extends \core_privacy\tests\provider_testcase {
      * Test a visible quiz with an unmet availability restriction.
      */
     public function test_restricted_quiz_is_not_exposed(): void {
-        global $DB, $PAGE, $COURSE, $OUTPUT;
+        global $DB, $PAGE, $COURSE;
         [$course, , $quiz] = $this->fixture();
         set_config('enableavailability', 1);
         $DB->set_field('course_modules', 'availability', json_encode([
@@ -182,7 +182,7 @@ final class security_test extends \core_privacy\tests\provider_testcase {
         $PAGE->set_course($course);
         $PAGE->set_context(\context_course::instance($course->id));
         set_config('enabled', 1, 'local_examnotice');
-        $hook = new \core\hook\output\before_footer_html_generation($OUTPUT);
+        $hook = new \core\hook\output\before_footer_html_generation($PAGE->get_renderer('core'));
         \local_examnotice\hook\before_footer::callback($hook);
         $this->assertSame('', $hook->get_output());
         try {
@@ -218,7 +218,7 @@ final class security_test extends \core_privacy\tests\provider_testcase {
         ]);
         $this->assertCount(1, $export->notices);
         $this->assertEquals($user->id, $export->notices[0]->userid);
-        $this->assertContains($context->id, provider::get_contexts_for_userid($user->id)->get_contextids());
+        $this->assertContainsEquals($context->id, provider::get_contexts_for_userid($user->id)->get_contextids());
         provider::delete_data_for_users(new approved_userlist($context, 'local_examnotice', []));
         $this->assertEquals(3, $DB->count_records('local_examnotice_seen'));
         provider::delete_data_for_user($approved);
