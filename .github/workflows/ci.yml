@@ -41,6 +41,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, intl, xml, curl, zip, gd, mysqli
+          ini-values: max_input_vars=5000
           coverage: none
 
       - name: Setup Node
