@@ -49,6 +49,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install locale required by Moodle PHPUnit
+        run: sudo locale-gen en_AU.UTF-8
+
       - name: Install moodle-plugin-ci
         run: |
           composer create-project -n moodlehq/moodle-plugin-ci ci ^4
