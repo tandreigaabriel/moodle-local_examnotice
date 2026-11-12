@@ -65,11 +65,21 @@ class dismiss_notice extends external_api {
         }
 
         $quiz    = $DB->get_record('quiz', ['id' => $params['quizid']], 'id, course', MUST_EXIST);
-        $context = \context_course::instance($quiz->course);
+        $cm = get_coursemodule_from_instance('quiz', $quiz->id, $quiz->course, false, MUST_EXIST);
+        $context = \context_module::instance($cm->id);
 
         // Validates session and context, throws if invalid.
         self::validate_context($context);
+        $modinfo = get_fast_modinfo($quiz->course, $USER->id);
+        $cminfo = $modinfo->get_cm($cm->id);
+        if (!$cminfo->uservisible || !$cminfo->available) {
+            throw new \require_login_exception('Activity is not available');
+        }
         require_capability('local/examnotice:view', $context);
+        require_capability('mod/quiz:view', $context);
+        if (!is_enrolled(\context_course::instance($quiz->course), $USER->id, '', true)) {
+            throw new \required_capability_exception($context, 'local/examnotice:view', 'nopermissions', '');
+        }
 
         $now    = time();
         $status = ($params['action'] === 'confirm') ? 1 : 0;
