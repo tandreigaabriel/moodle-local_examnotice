@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 (2026112500)
+
+- Copyright holder: TAG Digital Solutions Ltd.
+
 ## 1.0.1 (2026111200)
 
 - Security: the "before footer" hook and the notice dismissal web service now check that the quiz

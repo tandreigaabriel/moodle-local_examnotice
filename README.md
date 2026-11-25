@@ -208,11 +208,19 @@ rm /var/www/html/moodle/local/examnotice/admin/debug.php
 
 ---
 
+## Author and copyright
+
+Developed and maintained by Andrei Toma — TAG Digital Solutions Ltd (trading as TAG Web Design & Development), https://tandreig.com. © 2026 TAG Digital Solutions Ltd.
+
 ## License
 
 GNU GPL v3 — same as Moodle core.
 
 ## Changelog
+
+### 1.0.2
+
+- Copyright holder: TAG Digital Solutions Ltd.
 
 ### 1.0.1
 
